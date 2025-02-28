@@ -3,24 +3,32 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/ipfs/kubo/client/rpc"
+	"github.com/multiformats/go-multiaddr"
 )
 
 func main() {
-	config, err := loadConfig()
+	env, err := loadEnv()
 	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		log.Fatalf("Failed to load environment variables: %v", err)
 	}
 
-	node, err := rpc.NewLocalApi()
+	multi, err := multiaddr.NewMultiaddr(env.Multiaddr)
 	if err != nil {
-		log.Fatalf("Failed to create IPFS client: %v", err)
+		log.Fatalf("Failed to parse Kubo address: %v", err)
 	}
 
-	http.HandleFunc("/ask", ask(config, node))
+	kubo, err := rpc.NewApi(multi)
+	if err != nil {
+		log.Fatalf("Failed to create Kubo client: %v", err)
+	}
 
-	serverAddr := "localhost:9123"
+	http.HandleFunc("/ask", ask(env, kubo))
+
+	port := strconv.FormatUint(uint64(env.Port), 10)
+	serverAddr := "localhost:" + port
 	log.Printf("Starting server on %s\n", serverAddr)
 	if err := http.ListenAndServe(serverAddr, nil); err != nil {
 		log.Fatalf("Server failed: %v", err)

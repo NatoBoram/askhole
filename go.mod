@@ -5,6 +5,9 @@ go 1.24.0
 require (
 	github.com/ipfs/boxo v0.27.4
 	github.com/ipfs/kubo v0.33.2
+	github.com/joho/godotenv v1.5.1
+	github.com/jwalton/gchalk v1.3.0
+	github.com/multiformats/go-multiaddr v0.14.0
 )
 
 require (
@@ -58,6 +61,7 @@ require (
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/jbenet/go-temp-err-catcher v0.1.0 // indirect
 	github.com/jbenet/goprocess v0.1.4 // indirect
+	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/koron/go-ssdp v0.0.4 // indirect
@@ -82,7 +86,6 @@ require (
 	github.com/mr-tron/base58 v1.2.0 // indirect
 	github.com/multiformats/go-base32 v0.1.0 // indirect
 	github.com/multiformats/go-base36 v0.2.0 // indirect
-	github.com/multiformats/go-multiaddr v0.14.0 // indirect
 	github.com/multiformats/go-multiaddr-dns v0.4.1 // indirect
 	github.com/multiformats/go-multiaddr-fmt v0.1.0 // indirect
 	github.com/multiformats/go-multibase v0.2.0 // indirect
@@ -148,6 +151,7 @@ require (
 	golang.org/x/net v0.34.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/term v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools v0.28.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect

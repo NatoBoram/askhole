@@ -1,6 +1,9 @@
 # Askhole
 
-A Caddy "ask" endpoint for all your needs.
+[![Go](https://github.com/NatoBoram/askhole/actions/workflows/go.yaml/badge.svg)](https://github.com/NatoBoram/askhole/actions/workflows/go.yaml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/NatoBoram/askhole)](https://goreportcard.com/report/github.com/NatoBoram/askhole)
+
+A Caddy "ask" endpoint for Kubo.
 
 > ##### [`on_demand_tls`](https://caddyserver.com/docs/caddyfile/options#on-demand-tls)
 >

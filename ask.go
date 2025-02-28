@@ -9,7 +9,7 @@ import (
 	"github.com/ipfs/kubo/client/rpc"
 )
 
-func handleIPFS(w http.ResponseWriter, r *http.Request, hash string, kubo *rpc.HttpApi) {
+func askIpfs(w http.ResponseWriter, r *http.Request, kubo *rpc.HttpApi, hash string) {
 	path, err := path.NewPath("/ipfs/" + hash)
 	if err != nil {
 		log.Printf("Failed to create path from hash %q: %v\n", hash, err)
@@ -45,7 +45,7 @@ func handleIPFS(w http.ResponseWriter, r *http.Request, hash string, kubo *rpc.H
 	}
 }
 
-func handleIPNS(w http.ResponseWriter, r *http.Request, name string, kubo *rpc.HttpApi) {
+func askIpns(w http.ResponseWriter, r *http.Request, kubo *rpc.HttpApi, name string) {
 	path, err := path.NewPath("/ipns/" + name)
 	if err != nil {
 		log.Printf("Failed to create path from name %q: %v\n", name, err)
@@ -80,10 +80,11 @@ func handleIPNS(w http.ResponseWriter, r *http.Request, name string, kubo *rpc.H
 	}
 }
 
-func ask(config *Config, kubo *rpc.HttpApi) func(http.ResponseWriter, *http.Request) {
+func ask(config *Env, kubo *rpc.HttpApi) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		domain := r.URL.Query().Get("domain")
 		if domain == "" {
+			log.Printf("Received a request with no domain\n")
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -96,7 +97,7 @@ func ask(config *Config, kubo *rpc.HttpApi) func(http.ResponseWriter, *http.Requ
 
 		if domain == config.Domain {
 			log.Printf("Domain matches base domain exactly, no subdomain present\n")
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
 
@@ -113,25 +114,25 @@ func ask(config *Config, kubo *rpc.HttpApi) func(http.ResponseWriter, *http.Requ
 		switch lastPart {
 		case "ipfs":
 			if len(parts) != 2 {
-				log.Printf("Invalid IPFS domain format: %s\n", domain)
+				log.Printf("Invalid IPFS subdomain format: %s\n", domain)
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
 
 			hash := parts[0]
-			log.Printf("Received valid IPFS request for hash: %s\n", hash)
-			handleIPFS(w, r, hash, kubo)
+			log.Printf("Finding providers for IPFS %q...\n", hash)
+			askIpfs(w, r, kubo, hash)
 			return
 
 		case "ipns":
 			if len(parts) < 2 {
-				log.Printf("Invalid IPNS domain format: %s\n", domain)
+				log.Printf("Invalid IPNS subdomain format: %s\n", domain)
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
 			name := strings.Join(parts[:len(parts)-1], ".")
-			log.Printf("Received valid IPNS request for name %q\n", name)
-			handleIPNS(w, r, name, kubo)
+			log.Printf("Finding providers for IPNS %q...\n", name)
+			askIpns(w, r, kubo, name)
 			return
 
 		default:
