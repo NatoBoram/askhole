@@ -35,15 +35,15 @@ In Caddy, configure the `on_demand_tls` directive to ask the Askhole endpoint.
 
 ```yaml
 networks:
-	caddy-askhole:
+  caddy-askhole:
 
 services:
-	askhole:
-		image: natoboram/askhole
-		environment:
-			KUBO_DOMAIN: example.com
-		networks:
-			- caddy-askhole
+  askhole:
+    image: natoboram/askhole
+    environment:
+      KUBO_DOMAIN: example.com
+    networks:
+      - caddy-askhole
 ```
 
 In Caddy, configure the `on_demand_tls` directive to ask the Askhole endpoint.
@@ -71,7 +71,6 @@ In Caddy, configure the `on_demand_tls` directive to ask the Askhole endpoint.
 > The ask endpoint should return _as fast as possible_, in a few milliseconds, ideally. Typically, your endpoint should do a constant-time lookup in an database with an index by domain name; avoid loops. Avoid making DNS queries or other network requests.
 
 > - **permission** allows custom modules to be used to determine whether a certificate should be issued for a particular name. The module must implement the [`caddytls.OnDemandPermission` interface](https://pkg.go.dev/github.com/caddyserver/caddy/v2/modules/caddytls#OnDemandPermission). An `http` permission module is included, which is what the `ask` option uses, and remains as a shortcut for backwards compatibility.
->
 > - ⚠️ **interval** and **burst** rate limiting options were available, but are NOT recommended. Remove them from your config if you still have them.
 >
 > ```caddy
