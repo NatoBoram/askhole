@@ -54,12 +54,12 @@ func loadEnv() (*Env, error) {
 
 	multiaddr := os.Getenv("KUBO_MULTIADDR")
 	if multiaddr == "" {
-		return nil, fmt.Errorf("KUBO_MULTIADDR is required")
+		multiaddr = "/ip4/127.0.0.1/tcp/5001"
 	}
 
 	sPort := os.Getenv("PORT")
 	if sPort == "" {
-		return nil, fmt.Errorf("PORT is required")
+		sPort = "9123"
 	}
 
 	uPort, err := strconv.ParseUint(sPort, 10, 16)

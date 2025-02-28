@@ -1,0 +1,5 @@
+default: true
+heading-increment: false
+line-length: false
+no-blanks-blockquote: false
+no-hard-tabs: false

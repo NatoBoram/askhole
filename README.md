@@ -6,6 +6,56 @@
 
 A Caddy "ask" endpoint for Kubo.
 
+## Usage
+
+Askhole exposes an endpoint at `/ask` that expects the `?domain=` query parameter sent by Caddy's `on_demand_tls` directive. It then checks with Kubo to see if the IPFS or IPNS entry exists.
+
+For a domain `example.com`, it expects to receive a `<ipfs>.ipfs.example.com` or `<ipns>.ipns.example.com`.
+
+### Raw
+
+Install it somehow then run it with the desired environment variables.
+
+```sh
+go install github.com/NatoBoram/askhole@latest
+KUBO_DOMAIN=example.com askhole
+```
+
+In Caddy, configure the `on_demand_tls` directive to ask the Askhole endpoint.
+
+```caddy
+{
+	on_demand_tls {
+		ask http://localhost:9123/ask
+	}
+}
+```
+
+### Docker Compose
+
+```yaml
+networks:
+	caddy-askhole:
+
+services:
+	askhole:
+		image: natoboram/askhole
+		environment:
+			KUBO_DOMAIN: example.com
+		networks:
+			- caddy-askhole
+```
+
+In Caddy, configure the `on_demand_tls` directive to ask the Askhole endpoint.
+
+```caddy
+{
+	on_demand_tls {
+		ask http://askhole:9123/ask
+	}
+}
+```
+
 > ##### [`on_demand_tls`](https://caddyserver.com/docs/caddyfile/options#on-demand-tls)
 >
 > Configures [On-Demand TLS](https://caddyserver.com/docs/automatic-https#on-demand-tls) where it is enabled, but does not enable it (to enable it, use the [`on_demand` subdirective of the `tls` directive](https://caddyserver.com/docs/caddyfile/directives/tls#syntax)). Required for use in production environments, to prevent abuse.
