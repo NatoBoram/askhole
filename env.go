@@ -22,9 +22,11 @@ func getEnvironment() string {
 	}
 
 	if testing.Testing() {
+		os.Setenv("GO_ENV", "test")
 		return "test"
 	}
 
+	os.Setenv("GO_ENV", "development")
 	return "development"
 }
 
