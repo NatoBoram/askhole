@@ -11,7 +11,6 @@ FROM alpine
 WORKDIR /app
 
 COPY --from=build /build/askhole ./
-COPY .env .env.local .env.* .env.*.local ./
 
 ENV GO_ENV=production
 EXPOSE 9123
